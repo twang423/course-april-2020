@@ -50,6 +50,7 @@ SELECT e.name, IFNULL(d.name, "NA") AS department FROM employee e LEFT JOIN depa
 -- 13
 SELECT d.deptid, d.name, loc FROM employee e RIGHT JOIN department d ON e.deptid = d.deptid WHERE empid IS NULL;
 
+-- 13 alternative
 SELECT *
 FROM department 
 WHERE deptid NOT IN (SELECT deptid FROM employee);
@@ -136,6 +137,7 @@ JOIN department d
 ON e.deptid = d.deptid
 GROUP BY d.deptid;
 
+-- 31
 USE course;
 DELIMITER $$
 DROP PROCEDURE IF EXISTS spTotalSalary;
