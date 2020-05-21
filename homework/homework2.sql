@@ -10,13 +10,13 @@ SELECT name, salary, deptid FROM employee WHERE job = 'clerk' ORDER BY deptid, s
 SELECT	name, hiredate FROM employee WHERE job = 'manager';
 
 -- 4
-SELECT * FROM employee WHERE job = 'clerk' OR job = 'analyst' ORDER BY name DESC;
+SELECT * FROM employee WHERE job IN ('clerk','analyst') ORDER BY job, name DESC;
 
 -- 5
 SELECT * FROM employee WHERE salary BETWEEN 2200 AND 4500;
 
 -- 6
-SELECT * FROM employee WHERE job <> 'manager'  AND job <> 'president' ORDER BY salary;
+SELECT * FROM employee WHERE job NOT IN ('manager' , 'president') ORDER BY salary;
 
 -- 7
 SELECT * FROM employee WHERE salary > ( SELECT salary FROM employee WHERE name = 'blake');
@@ -24,58 +24,86 @@ SELECT * FROM employee WHERE salary > ( SELECT salary FROM employee WHERE name =
 -- 8
 SELECT * FROM employee WHERE job = ( SELECT job FROM employee WHERE name = 'allen');
 
+-- 8 alternative
+SELECT * FROM employee a
+JOIN employee b
+ON a.job = b.job
+AND b.name = 'allen';
+
 -- 9
-SELECT * FROM employee WHERE salary = ANY ( SELECT salary FROM employee WHERE name = 'ford' OR name = 'smith');
+SELECT * FROM employee WHERE salary IN ( SELECT salary FROM employee WHERE name IN ('ford', 'smith'));
 
 -- 10
-SELECT a.*, b.name AS manager_name, b. hiredate AS manager_hiredate FROM employee a, employee b WHERE a.manager = b.empid AND a.hiredate < b.hiredate;
+SELECT a.*, b.name AS manager_name, b. hiredate AS manager_hiredate 
+FROM employee a, employee b 
+WHERE a.manager = b.empid 
+AND a.hiredate < b.hiredate;
 
 -- 11
-SELECT a.deptid, a.name, a.salary FROM employee a LEFT JOIN employee b ON a.deptid = b.deptid AND a.salary < b.salary WHERE b.deptid IS NULL ORDER BY a.deptid;  
+SELECT name, MAX(salary)
+FROM course.employee
+GROUP BY deptid;
 
 -- 12
-SELECT employee.name, department.name AS department FROM employee JOIN department ON employee.deptid = department.deptid;
+SELECT e.name, IFNULL(d.name, "NA") AS department FROM employee e LEFT JOIN department d ON e.deptid = d.deptid;
 
 -- 13
-SELECT department.deptid, department.name, loc FROM employee RIGHT JOIN department ON employee.deptid = department.deptid WHERE empid IS NULL;
+SELECT d.deptid, d.name, loc FROM employee e RIGHT JOIN department d ON e.deptid = d.deptid WHERE empid IS NULL;
+
+SELECT *
+FROM department 
+WHERE deptid NOT IN (SELECT deptid FROM employee);
 
 -- 14
-SELECT * FROM employee ORDER BY salary DESC LIMIT 1 OFFSET 1;
+SELECT salary FROM employee ORDER BY salary DESC LIMIT 1 OFFSET 1;
+
+-- 14 alternative
+SELECT MAX(salary)
+FROM employee
+WHERE salary NOT IN (SELECT MAX(salary) FROM employee);
 
 -- 15
 SELECT * FROM employee ORDER BY salary DESC LIMIT 1 OFFSET 2;
 
 -- 16
-SELECT 	job, SUM(salary) AS total_salary FROM employee GROUP BY job;
+SELECT job, SUM(salary) AS total_salary FROM employee GROUP BY job;
 
 -- 17
-SELECT department.deptid, department.name, AVG(salary) AS average_salary FROM employee JOIN department ON employee.deptid = department.deptid GROUP BY deptid;
+SELECT d.deptid, d.name, IFNULL(AVG(salary), 0) AS average_salary FROM employee e RIGHT JOIN department d ON e.deptid = d.deptid GROUP BY d.deptid;
 
 -- 18
-SELECT department.deptid, department.name, AVG(salary) AS average_salary FROM employee JOIN department ON employee.deptid = department.deptid GROUP BY deptid 
-HAVING average_salary >= 2000;
+SELECT d.deptid, d.name, AVG(salary) AS average_salary FROM employee e JOIN department d ON e.deptid = d.deptid GROUP BY d.deptid 
+HAVING AVG(salary) >= 1000;
 
 -- 19
 SELECT COUNT(*), deptid, job FROM employee GROUP BY deptid, job ORDER BY deptid;
 
 -- 20
-SELECT temp.deptid, name, loc, employee_num FROM department RIGHT JOIN
-(SELECT COUNT(*) AS employee_num, deptid FROM employee GROUP BY deptid HAVING employee_num > 2) AS temp ON department.deptid = temp.deptid;
+SELECT d.name, d.loc, COUNT(*) AS count
+FROM department d
+JOIN employee e
+ON e.deptid = d.deptid
+GROUP BY d.deptid
+HAVING COUNT(*)>=2;
 
 -- 21
-SELECT t1.deptid, name, loc, employee_num, clerk_num FROM 
-(SELECT temp.deptid AS deptid, name, loc, employee_num FROM department RIGHT JOIN
-(SELECT COUNT(*) AS employee_num, deptid FROM employee GROUP BY deptid) AS temp ON department.deptid = temp.deptid)  t1
-JOIN
-(SELECT COUNT(*) AS clerk_num, deptid FROM employee GROUP BY deptid, job HAVING job = 'clerk' AND clerk_num >=  2) t2
-ON t1.deptid = t2.deptid;
+SELECT d.name, d.loc, count(*)
+FROM employee e 
+JOIN department d
+ON e.deptid = d.deptid
+WHERE e.job = 'CLERK' 
+HAVING count(*)>2;
 
 -- 22
-SELECT deptid, name, loc, employee_num FROM department NATURAL JOIN
-(SELECT COUNT(*) AS employee_num, department.deptid FROM employee JOIN department ON employee.deptid = department.deptid GROUP BY deptid ) AS temp ORDER BY employee_num DESC LIMIT 1;
+SELECT d.name, COUNT(*) as count
+FROM employee e
+INNER JOIN department d on e.deptid = d.deptid
+GROUP BY d.name
+ORDER BY COUNT(*) DESC
+LIMIT 1;
 
 -- 23
-SELECT * FROM employee WHERE name LIKE '%a%';
+SELECT * FROM employee WHERE UPPER(name) LIKE '%A%';
 
 -- 24
 SELECT * FROM employee WHERE dayofmonth(hiredate) < 15;
@@ -84,58 +112,50 @@ SELECT * FROM employee WHERE dayofmonth(hiredate) < 15;
 -- 18
 
 -- 26
-SELECT concat(name, '(', job, ')') AS employee_job FROM employee;
+SELECT CONCAT(name, '(', LOWER(job), ')') AS employee_job FROM employee;
+
+-- NOT ACCETPTABLE IN mysql
+-- SELECT NAME || "(" || LOWER(JOB) || ")"
+-- FROM EMPLOYEE;
 
 -- 27
-SELECT a.deptid, a.name, a.salary FROM employee a LEFT JOIN employee b ON a.deptid = b.deptid AND a.salary > b.salary WHERE b.deptid IS NULL ORDER BY a.salary DESC;
+SELECT name, MIN(salary) AS min_salary FROM employee GROUP BY deptid ORDER BY MIN(salary) DESC;
 
 -- 28
-SELECT a.deptid, a.name, a.hiredate FROM employee a LEFT JOIN employee b ON a.deptid = b.deptid AND a.hiredate < b.hiredate WHERE b.deptid IS NULL ORDER BY a.hiredate;
+SELECT e.name, MIN(hiredate) AS min_salary FROM employee e JOIN department d ON e.deptid = d.deptid GROUP BY d.deptid ORDER BY MIN(hiredate);
 
 -- 29
 SELECT * FROM employee WHERE year(hiredate) = 1981;
 
 -- 30
-SELECT name, temp_table.deptid, junior_count, senior_count FROM department RIGHT JOIN (
-SELECT junior_count_table.deptid, junior_count, COALESCE(senior_count, 0) AS senior_count FROM ((
-SELECT deptid, COUNT(*) AS junior_count FROM 
-(SELECT * FROM employee WHERE hiredate > STR_TO_DATE('1-5-1981','%d-%m-%Y')) AS all_junior 
-GROUP BY deptid) junior_count_table
-LEFT JOIN (
-SELECT deptid, COUNT(*) AS senior_count FROM 
-(SELECT * FROM employee WHERE hiredate <= STR_TO_DATE('1-5-1981','%d-%m-%Y')) AS all_senior
-GROUP BY deptid) senior_count_table 
-ON junior_count_table.deptid = senior_count_table.deptid)
-UNION
-SELECT senior_count_table.deptid, COALESCE(junior_count, 0) AS junior_count, senior_count FROM ((
-SELECT deptid, COUNT(*) AS junior_count FROM 
-(SELECT * FROM employee WHERE hiredate > STR_TO_DATE('1-5-1981','%d-%m-%Y')) AS all_junior 
-GROUP BY deptid) junior_count_table
-RIGHT JOIN (
-SELECT deptid, COUNT(*) AS senior_count FROM 
-(SELECT * FROM employee WHERE hiredate <= STR_TO_DATE('1-5-1981','%d-%m-%Y')) AS all_senior
-GROUP BY deptid) senior_count_table 
-ON junior_count_table.deptid = senior_count_table.deptid)
-) AS temp_table ON department.deptid = temp_table.deptid;
+SELECT d.name,
+IFNULL(SUM(CASE WHEN e.hiredate <= "1981-05-01" THEN 1 END), 0) AS senior_count,
+IFNULL(SUM(CASE WHEN e.hiredate > "1981-05-01" THEN 1 END), 0) AS junior_count
+FROM employee e
+JOIN department d
+ON e.deptid = d.deptid
+GROUP BY d.deptid;
 
--- 30 w/o departments with no name
-SELECT junior_count_table.deptid, junior_count, COALESCE(senior_count, 0) AS senior_count FROM ((
-SELECT deptid, COUNT(*) AS junior_count FROM 
-(SELECT * FROM employee WHERE hiredate > STR_TO_DATE('1-5-1981','%d-%m-%Y')) AS all_junior 
-GROUP BY deptid) junior_count_table
-LEFT JOIN (
-SELECT deptid, COUNT(*) AS senior_count FROM 
-(SELECT * FROM employee WHERE hiredate <= STR_TO_DATE('1-5-1981','%d-%m-%Y')) AS all_senior
-GROUP BY deptid) senior_count_table 
-ON junior_count_table.deptid = senior_count_table.deptid)
-UNION
-SELECT senior_count_table.deptid, COALESCE(junior_count, 0) AS junior_count, senior_count FROM ((
-SELECT deptid, COUNT(*) AS junior_count FROM 
-(SELECT * FROM employee WHERE hiredate > STR_TO_DATE('1-5-1981','%d-%m-%Y')) AS all_junior 
-GROUP BY deptid) junior_count_table
-RIGHT JOIN (
-SELECT deptid, COUNT(*) AS senior_count FROM 
-(SELECT * FROM employee WHERE hiredate <= STR_TO_DATE('1-5-1981','%d-%m-%Y')) AS all_senior
-GROUP BY deptid) senior_count_table 
-ON junior_count_table.deptid = senior_count_table.deptid);
+USE course;
+DELIMITER $$
+DROP PROCEDURE IF EXISTS spTotalSalary;
+CREATE PROCEDURE spTotalSalary(
+IN depname VARCHAR(14),
+OUT sum INT
+)
+BEGIN
+SELECT SUM(e.salary) INTO sum
+FROM employee e
+JOIN department d
+on e.deptid = d.deptid
+WHERE depname = d.name;
+END$$
+DELIMITER ;
+
+call spTotalSalary('ACCOUNTING',@sum);
+SELECT @sum as sum;
+
+
+
+
 
