@@ -10,13 +10,13 @@ SELECT name, salary, deptid FROM employee WHERE job = 'clerk' ORDER BY deptid, s
 SELECT	name, hiredate FROM employee WHERE job = 'manager';
 
 -- 4
-SELECT * FROM employee WHERE job IN ('clerk','analyst') ORDER BY job, name DESC;
+SELECT * FROM employee WHERE job IN ('clerk', 'analyst') ORDER BY job, name DESC;
 
 -- 5
 SELECT * FROM employee WHERE salary BETWEEN 2200 AND 4500;
 
 -- 6
-SELECT * FROM employee WHERE job NOT IN ('manager' , 'president') ORDER BY salary;
+SELECT * FROM employee WHERE job NOT IN ('manager', 'president') ORDER BY salary;
 
 -- 7
 SELECT * FROM employee WHERE salary > ( SELECT salary FROM employee WHERE name = 'blake');
@@ -96,9 +96,9 @@ WHERE e.job = 'CLERK'
 HAVING count(*)>2;
 
 -- 22
-SELECT d.name, COUNT(*) as count
+SELECT d.name, COUNT(*) AS count
 FROM employee e
-INNER JOIN department d on e.deptid = d.deptid
+INNER JOIN department d ON e.deptid = d.deptid
 GROUP BY d.name
 ORDER BY COUNT(*) DESC
 LIMIT 1;
@@ -107,7 +107,7 @@ LIMIT 1;
 SELECT * FROM employee WHERE UPPER(name) LIKE '%A%';
 
 -- 24
-SELECT * FROM employee WHERE dayofmonth(hiredate) < 15;
+SELECT * FROM employee WHERE DAYOFMONTH(hiredate) < 15;
 
 -- 25
 -- 18
@@ -154,8 +154,8 @@ WHERE depname = d.name;
 END$$
 DELIMITER ;
 
-call spTotalSalary('ACCOUNTING',@sum);
-SELECT @sum as sum;
+CALL spTotalSalary('ACCOUNTING',@sum);
+SELECT @sum AS sum;
 
 
 
