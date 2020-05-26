@@ -13,9 +13,7 @@ import java.util.List;
 public class EmployeeController {
 
     @GetMapping("/test")
-    public String greetings() {
-        return "Hello World";
-    }
+    public String greetings() { return "Hello World"; }
 
     private EmployeeService service;
 
@@ -28,14 +26,9 @@ public class EmployeeController {
         this.service = service;
     }
 
-//    @RequestMapping(value = "/all", method = RequestMethod.GET)
-//    public List<Employee> getEmployees() {
-//        return service.getAllEmployee();
-//    }
+    @GetMapping("/get/{id}")
+    public List<Employee> getEmployeeById(@PathVariable int id) { return service.getEmployeeById(id); }
 
-//    @GetMapping("/get/{id}")
-//    public Employee getEmployeeById(@PathVariable int id) {
-//        return service.getEmployeeById(id);
-//    }
-
+    @RequestMapping(value = "/get/all", method = RequestMethod.GET)
+    public List<Employee> getAllEmployee() { return service.getAllEmployee(); }
 }

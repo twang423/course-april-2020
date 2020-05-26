@@ -10,14 +10,10 @@ import java.util.List;
 @Service
 public class EmployeeService {
 
-//    @Autowired
-//    private EmployeeHelper helper;
-//
-//    public Employee getEmployeeById(int id) {
-//        return helper.getEmployeeById(id);
-//    }
+    @Autowired
+    private EmployeeHelper helper;
 
-//    public List<Employee> getAllEmployees() {
-//        return helper.getAllEmployees();
-//    }
+    public List<Employee> getEmployeeById(int id) { return helper.getEmployeeById(id); }
+
+    public List<Employee> getAllEmployee() { return helper.getAllEmployee(); }
 }

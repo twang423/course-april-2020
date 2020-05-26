@@ -8,13 +8,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
 @EnableJpaRepositories
 @Repository
-
 public interface DepartmentRepository extends JpaRepository<Department, Integer> {
-    public List<Department> findById(int id);
-    public List<Department> findAllByIdNotNull();
+    List<Department> findById(int id);
+    List<Department> findAllByIdNotNull();
 }
 
 

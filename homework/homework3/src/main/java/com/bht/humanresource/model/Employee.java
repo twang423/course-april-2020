@@ -1,19 +1,29 @@
 package com.bht.humanresource.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
+@Table(name="employee")
 public class Employee {
     @Id
+    @Column(name="empid")
     private int id;
+    @Column(name="name")
     private String name;
+    @Column(name="job")
     private String job;
-    private int manager;
+    @Column(name="manager")
+    private Integer manager;
+    @Column(name="hiredate")
     private Date hireDate;
+    @Column(name="salary")
     private double salary;
-    private int departmentId;
+    @Column(name="deptid")
+    private Integer departmentId;
 
     public Employee() {
     }
@@ -52,7 +62,7 @@ public class Employee {
         this.job = job;
     }
 
-    public int getManager() {
+    public Integer getManager() {
         return manager;
     }
 
@@ -76,7 +86,7 @@ public class Employee {
         this.salary = salary;
     }
 
-    public int getDepartmentId() {
+    public Integer getDepartmentId() {
         return departmentId;
     }
 
