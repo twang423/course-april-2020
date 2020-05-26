@@ -23,4 +23,6 @@ public class DepartmentHelper {
     public List<Department> getAllDepartment() {
         return repo.findAllByIdNotNull();
     }
+
+    public void createDepartment(Department department) { repo.save(department); }
 }

@@ -2,11 +2,9 @@ package com.bht.humanresource.controller;
 
 import com.bht.humanresource.model.Department;
 import com.bht.humanresource.service.DepartmentService;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,4 +31,7 @@ public class DepartmentController {
 
     @GetMapping("/get/all")
     public List<Department> getAllDepartment() { return service.getAllDepartment(); }
+
+    @PostMapping("/new")
+    public void createDepartment(@RequestBody Department department) { service.createDepartment(department); }
 }

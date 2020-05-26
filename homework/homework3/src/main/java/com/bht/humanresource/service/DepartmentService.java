@@ -2,6 +2,7 @@ package com.bht.humanresource.service;
 
 import com.bht.humanresource.helper.DepartmentHelper;
 import com.bht.humanresource.model.Department;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,4 +21,6 @@ public class DepartmentService {
     public List<Department> getAllDepartment() {
         return helper.getAllDepartment();
     }
+
+    public void createDepartment(Department department) { helper.createDepartment(department); }
 }
