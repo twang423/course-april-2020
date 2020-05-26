@@ -1,5 +1,6 @@
 package com.bht.humanresource.controller;
 
+import com.bht.humanresource.model.Department;
 import com.bht.humanresource.model.Employee;
 import com.bht.humanresource.service.EmployeeService;
 
@@ -31,4 +32,10 @@ public class EmployeeController {
 
     @RequestMapping(value = "/get/all", method = RequestMethod.GET)
     public List<Employee> getAllEmployee() { return service.getAllEmployee(); }
+
+    @PostMapping("/new")
+    public void createEmployee(@RequestBody Employee employee) { service.createEmployee(employee); }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteEmployee(@PathVariable int id) { service.deleteEmployee(id); };
 }

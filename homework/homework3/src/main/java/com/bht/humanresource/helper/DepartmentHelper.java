@@ -32,4 +32,6 @@ public class DepartmentHelper {
         if (location != null)
             repo.setDepartmentLocation(id, location);
     }
+
+    public void deleteDepartment(int id) { repo.deleteById(id); }
 }

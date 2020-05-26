@@ -17,4 +17,8 @@ public class EmployeeService {
     public List<Employee> getEmployeeById(int id) { return helper.getEmployeeById(id); }
 
     public List<Employee> getAllEmployee() { return helper.getAllEmployee(); }
+
+    public void createEmployee(Employee employee) { helper.createEmployee(employee); }
+
+    public void deleteEmployee(int id) { helper.deleteEmployee(id); }
 }

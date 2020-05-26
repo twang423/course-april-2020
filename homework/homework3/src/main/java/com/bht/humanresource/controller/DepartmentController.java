@@ -41,4 +41,7 @@ public class DepartmentController {
                                  @RequestParam(name = "location", required = false) String location) {
         service.updateDepartment(id, name, location);
     }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteDepartment(@PathVariable int id) { service.deleteDepartment(id); };
 }

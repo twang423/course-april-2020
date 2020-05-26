@@ -26,4 +26,5 @@ public class DepartmentService {
 
     public void updateDepartment(Integer id, String name, String location) { helper.updateDepartment(id, name, location); }
 
+    public void deleteDepartment(int id) { helper.deleteDepartment(id); }
 }

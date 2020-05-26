@@ -17,4 +17,8 @@ public class EmployeeHelper {
     public List<Employee> getEmployeeById(int id) { return repo.findById(id); }
 
     public List<Employee> getAllEmployee() { return repo.findAllByIdNotNull(); }
+
+    public void createEmployee(Employee employee) { repo.save(employee); }
+
+    public void deleteEmployee(int id) { repo.deleteById(id); }
 }

@@ -16,7 +16,6 @@ import java.util.List;
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department, Integer> {
 
-
     List<Department> findById(int id);
     List<Department> findAllByIdNotNull();
 
@@ -29,6 +28,10 @@ public interface DepartmentRepository extends JpaRepository<Department, Integer>
     @Transactional
     @Query("update Department d set d.location = ?2 where d.id = ?1")
     void setDepartmentLocation(Integer id, String location);
+
+    @Modifying
+    void deleteById(Integer id);
+
 }
 
 
