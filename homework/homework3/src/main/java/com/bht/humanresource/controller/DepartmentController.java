@@ -34,4 +34,11 @@ public class DepartmentController {
 
     @PostMapping("/new")
     public void createDepartment(@RequestBody Department department) { service.createDepartment(department); }
+
+    @PutMapping("/update")
+    public void updateDepartment(@RequestParam(name = "id") Integer id,
+                                 @RequestParam(name = "name", required = false) String name,
+                                 @RequestParam(name = "location", required = false) String location) {
+        service.updateDepartment(id, name, location);
+    }
 }

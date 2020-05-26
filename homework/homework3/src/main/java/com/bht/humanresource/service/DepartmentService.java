@@ -23,4 +23,7 @@ public class DepartmentService {
     }
 
     public void createDepartment(Department department) { helper.createDepartment(department); }
+
+    public void updateDepartment(Integer id, String name, String location) { helper.updateDepartment(id, name, location); }
+
 }
